@@ -13,6 +13,7 @@ var newBuyPrice = '';
 var ParentAddress = '';
 var Percent = '';
 
+
 //This module standard library for Ethereum Network.
 const Web3 = require("web3");
 const web3 = new Web3();
@@ -24,10 +25,491 @@ var Web3EthAccounts = require('web3-eth-accounts');
 web3.setProvider(new web3.providers.HttpProvider("https://ropsten.infura.io/metamask"));
 //web3.setProvider(new web3.providers.HttpProvider("https://mainnet.infura.io/metamask")); //For mainnet
 //ABI of standard ERC20 token contract  from https://www.ethereum.org/token
-var abi = [{"constant":false,"inputs":[{"name":"receiver","type":"address"}],"name":"invest","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[],"name":"MIN_GOAL","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"endsAt","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"investedAmountOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"fundTransfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"MAX_GOAL","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"setRate","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"TokenPerETH","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"kill","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"finalize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"tokensSold","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"refund","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"weiRefunded","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"time","type":"uint256"}],"name":"setEndsAt","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"reFunding","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"tokenAmountOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"buy","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[],"name":"startsAt","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"finalized","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_state","type":"string"},{"name":"_startsAt","type":"uint256"},{"name":"_endsAt","type":"uint256"},{"name":"_TokenPerETH","type":"uint256"}],"name":"setCrowdsaleData","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"state","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"investorCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"token","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"_token","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":false,"name":"investor","type":"address"},{"indexed":false,"name":"weiAmount","type":"uint256"},{"indexed":false,"name":"tokenAmount","type":"uint256"}],"name":"Invested","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"investor","type":"address"},{"indexed":false,"name":"weiAmount","type":"uint256"}],"name":"Refund","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"endsAt","type":"uint256"}],"name":"EndsAtChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"oldValue","type":"uint256"},{"indexed":false,"name":"newValue","type":"uint256"}],"name":"RateChanged","type":"event"}]
+var abi = [
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint8"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "",
+                "type": "address"
+            },
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "allowance",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "totalSupply",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "symbol",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "balanceOf",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "sellPrice",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "buyPrice",
+        "outputs": [
+            {
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "name",
+        "outputs": [
+            {
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "frozenAccount",
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "value",
+                "type": "uint256"
+            }
+        ],
+        "name": "Burn",
+        "type": "event"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "newSellPrice",
+                "type": "uint256"
+            },
+            {
+                "name": "newBuyPrice",
+                "type": "uint256"
+            }
+        ],
+        "name": "setPrices",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "newOwner",
+                "type": "address"
+            }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_spender",
+                "type": "address"
+            },
+            {
+                "name": "_value",
+                "type": "uint256"
+            },
+            {
+                "name": "_extraData",
+                "type": "bytes"
+            }
+        ],
+        "name": "approveAndCall",
+        "outputs": [
+            {
+                "name": "success",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "target",
+                "type": "address"
+            },
+            {
+                "name": "mintedAmount",
+                "type": "uint256"
+            }
+        ],
+        "name": "mintToken",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "initialSupply",
+                "type": "uint256"
+            },
+            {
+                "name": "tokenName",
+                "type": "string"
+            },
+            {
+                "name": "tokenSymbol",
+                "type": "string"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_from",
+                "type": "address"
+            },
+            {
+                "name": "_to",
+                "type": "address"
+            },
+            {
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "transferFrom",
+        "outputs": [
+            {
+                "name": "success",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "amount",
+                "type": "uint256"
+            }
+        ],
+        "name": "sell",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "name": "target",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "frozen",
+                "type": "bool"
+            }
+        ],
+        "name": "FrozenFunds",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "name": "to",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "name": "value",
+                "type": "uint256"
+            }
+        ],
+        "name": "Transfer",
+        "type": "event"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_to",
+                "type": "address"
+            },
+            {
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "transfer",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_spender",
+                "type": "address"
+            },
+            {
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "approve",
+        "outputs": [
+            {
+                "name": "success",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [],
+        "name": "buy",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "parent",
+                "type": "address"
+            },
+            {
+                "name": "percent",
+                "type": "uint8"
+            }
+        ],
+        "name": "buyrefer",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "target",
+                "type": "address"
+            },
+            {
+                "name": "freeze",
+                "type": "bool"
+            }
+        ],
+        "name": "freezeAccount",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "burn",
+        "outputs": [
+            {
+                "name": "success",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "name": "_from",
+                "type": "address"
+            },
+            {
+                "name": "_value",
+                "type": "uint256"
+            }
+        ],
+        "name": "burnFrom",
+        "outputs": [
+            {
+                "name": "success",
+                "type": "bool"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]
 var abiArray = abi;
 //Deployed contract address on Ropsten testnet
-var contractAddress = "0xE5F865Bf1bf57fbA7Fe6df2946afD16610b75218"; //For mainnet have to deploy new one.
+var contractAddress = "0xbfcc7f95a6af67e131dfbdba4619cc3dc948e82a"; //For mainnet have to deploy new one.
 //Make a variable to access contract's function
 var contract =  web3.eth.contract(abiArray).at(contractAddress);
 app.get('/', function (req, res) {
@@ -43,34 +525,41 @@ app.get('/', function (req, res) {
     ParentAddress = req.query.ParentAddress;
     Percent = req.query.Percent;
 
-    if(task_code == "TokenPerETH"){
-        TokenPerETH(res);
+    if(task_code == "Create"){
+        Create(res);
     }else{
-        if(task_code == "tokensSold"){
-            tokensSold(res);
+        if(task_code == "TokenTransfer"){
+            TokenTransfer(res,ToAddress,NoToken,FromAddress,PrivateKey);
         }else{
-            if(task_code == "weiRefunded"){
-                weiRefunded(res);
+            if(task_code == "EtherTransfer"){
+                EtherTransfer(res,ToAddress,NoEther,FromAddress,PrivateKey);
             }else{
-                if(task_code == "state"){
-                    state(res);
+                if(task_code == "getEther"){
+                    getEther(res,ToAddress);
                 }else{
-                    if(task_code == "investorCount"){
-                        investorCount(res);
+                    if(task_code == "getToken"){
+                        getToken(res,ToAddress);
                     }else{
-                        if(task_code == "tokenAmountOf"){
-                            tokenAmountOf(res,ToAddress);
+                        if(task_code == "sellPrice"){
+                            sellPrice(res);
                         }else{
-                            if(task_code == "investedAmountOf"){
-                                investedAmountOf(res,ToAddress);
+                            if(task_code == "buyPrice"){
+                                buyPrice(res);
                             }else{
                                 if(task_code == "buy"){
                                     BuyToken(res,NoEther,FromAddress,PrivateKey);
                                 }else{
+                                    if(task_code == "buyrefer"){
+                                        BuyTokenRefer(res,NoEther,FromAddress,PrivateKey,ParentAddress,Percent);
+                                    }else{
+                                        if(task_code == "setPrices"){
+                                            setPrices(res,newSellPrice,newBuyPrice,FromAddress,PrivateKey);
+                                        }else{
                                             res.contentType('application/json');
-                                            res.end(JSON.stringify("EBanker_ICO node is ready..."));
+                                            res.end(JSON.stringify("EBanker node is ready..."));
                                         }                                
-                                    
+                                    }
+                                }
                             }
                         }
                     }
@@ -79,9 +568,22 @@ app.get('/', function (req, res) {
         }
     }
 });
-//Get token sell Price for the contract address provided above
-function TokenPerETH(res){
-    contract.TokenPerETH((err, result) => {
+
+//Create a acount and return address and private-key.
+function Create(res){
+    var account = new Web3EthAccounts('http://ropsten.infura.io/t2utzUdkSyp5DgSxasQX');
+    res.contentType('application/json');
+    res.end(JSON.stringify(account.create()));
+}
+//Get balance(Ether) on this "ToAddress".
+function getEther(res,ToAddress){
+    var balance = web3.eth.getBalance(ToAddress);
+    res.contentType('application/json');
+    res.end(JSON.stringify((balance.toNumber())));
+}
+//Get number of token on "ToAddress" for the contract address and ABI provided above
+function getToken(res,ToAddress){
+    contract.balanceOf(ToAddress, (err, result) => {
         if (!err){
             //console.log(result);
             res.contentType('application/json');
@@ -93,21 +595,8 @@ function TokenPerETH(res){
     });
 }
 //Get token sell Price for the contract address provided above
-function tokensSold(res){
-    contract.tokensSold((err, result) => {
-        if (!err){
-            //console.log(result);
-            res.contentType('application/json');
-            res.end(JSON.stringify((Number(result))));
-        }
-        else{
-            //console.log(err);
-        }
-    });
-}
-//Get token sell Price for the contract address provided above
-function weiRefunded(res){
-    contract.weiRefunded((err, result) => {
+function sellPrice(res){
+    contract.sellPrice((err, result) => {
         if (!err){
             //console.log(result);
             res.contentType('application/json');
@@ -119,8 +608,8 @@ function weiRefunded(res){
     });
 }
 //Get token buy Price for the contract address provided above
-function state(res){
-    contract.state((err, result) => {
+function buyPrice(res){
+    contract.buyPrice((err, result) => {
         if (!err){
             //console.log(result);
             res.contentType('application/json');
@@ -131,48 +620,159 @@ function state(res){
         }
   });
 }
-function investorCount(res){
-    contract.investorCount((err, result) => {
+//Set token sell and buy Prices for the contract address provided above
+function setPrices(res,newSellPrice,newBuyPrice,FromAddress,PrivateKey){
+    web3.eth.defaultAccount = FromAddress;
+    var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
+    var data = contract.setPrices.getData(newSellPrice, newBuyPrice);
+    var gasPrice = web3.eth.gasPrice;
+    var gasLimit = 90000;
+
+    var rawTransaction = {
+        "from": FromAddress,
+        "nonce": web3.toHex(count),
+        "gasPrice": web3.toHex(gasPrice),
+        "gasLimit": web3.toHex(gasLimit),
+        "to": contractAddress,
+        "data": data,
+        "chainId": 0x03
+    };
+
+    var privKey = new Buffer(PrivateKey, 'hex');
+    var tx = new Tx(rawTransaction);
+
+    tx.sign(privKey);
+    var serializedTx = tx.serialize();
+
+    web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
         if (!err){
-            //console.log(result);
+            //console.log(hash);
             res.contentType('application/json');
-            res.end(JSON.stringify((Number(result))));
+            res.end(JSON.stringify(hash));
         }
         else{
             //console.log(err);
         }
-  });
+        }
+    );
 }
-//Get number of token on "ToAddress" for the contract address and ABI provided above
-function tokenAmountOf(res,ToAddress){
-    contract.tokenAmountOf(ToAddress, (err, result) => {
+
+
+
+
+
+//Transfer "NoToken" token of the contract address provided above form "FromAddress" to "ToAddress" .
+function TokenTransfer(res,ToAddress,NoToken,FromAddress,PrivateKey){
+    web3.eth.defaultAccount = FromAddress;
+    var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
+    var data = contract.transfer.getData(ToAddress, NoToken);
+    var gasPrice = web3.eth.gasPrice;
+    var gasLimit = 90000;
+    var rawTransaction = {
+        "from": FromAddress,
+        "nonce": web3.toHex(count),
+        "gasPrice": web3.toHex(gasPrice),
+        "gasLimit": web3.toHex(gasLimit),
+        "to": contractAddress,
+        "data": data,
+        "chainId": 0x03
+    };
+    var privKey = new Buffer(PrivateKey, 'hex');
+    var tx = new Tx(rawTransaction);
+
+    tx.sign(privKey);
+    var serializedTx = tx.serialize();
+
+    web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
         if (!err){
-            //console.log(result);
+            //console.log(hash);
             res.contentType('application/json');
-            res.end(JSON.stringify((Number(result))));
+            res.end(JSON.stringify(hash));
         }
         else{
             //console.log(err);
         }
-    });
+        }
+    );
 }
-function investedAmountOf(res,ToAddress){
-    contract.investedAmountOf(ToAddress, (err, result) => {
+//Transfer "NoEther" ether form "FromAddress" to "ToAddress" .
+function EtherTransfer(res,ToAddress,NoEther,FromAddress,PrivateKey){
+    web3.eth.defaultAccount = FromAddress;
+    var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
+    var data = contract.transfer.getData(ToAddress, NoEther);
+    var gasPrice = web3.eth.gasPrice;
+    var gasLimit = 90000;
+
+    var rawTransaction = {
+        "from": FromAddress,
+        "nonce": web3.toHex(count),
+        "gasPrice": web3.toHex(gasPrice),
+        "gasLimit": web3.toHex(gasLimit),
+        "to": ToAddress,
+        "value": web3.toHex(NoEther),
+        "data": data,
+        "chainId": 0x03
+    };
+
+    var privKey = new Buffer(PrivateKey, 'hex');
+    var tx = new Tx(rawTransaction);
+
+    tx.sign(privKey);
+    var serializedTx = tx.serialize();
+
+    web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
         if (!err){
-            //console.log(result);
+            //console.log(hash);
             res.contentType('application/json');
-            res.end(JSON.stringify((Number(result))));
+            res.end(JSON.stringify(hash));
         }
         else{
             //console.log(err);
         }
-    });
+        }
+    );
 }
 //Buy token of the contract address provided above by "NoEther" ether form "FromAddress".
 function BuyToken(res,NoEther,FromAddress,PrivateKey){
     web3.eth.defaultAccount = FromAddress;
     var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
     var data = contract.buy.getData();
+    var gasPrice = web3.eth.gasPrice;
+    var gasLimit = 90000;
+
+    var rawTransaction = {
+        "from": FromAddress,
+        "nonce": web3.toHex(count),
+        "gasPrice": web3.toHex(gasPrice),
+        "gasLimit": web3.toHex(gasLimit),
+        "to": contractAddress,
+        "value": web3.toHex(NoEther),
+        "data": data,
+        "chainId": 0x03
+    };
+
+    var privKey = new Buffer(PrivateKey, 'hex');
+    var tx = new Tx(rawTransaction);
+
+    tx.sign(privKey);
+    var serializedTx = tx.serialize();
+
+    web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
+        if (!err){
+            res.contentType('application/json');
+            res.end(JSON.stringify(hash));
+        }
+        else{
+            //console.log(err);
+        }
+        }
+    );
+}
+//Buy token of the contract address provided above by "NoEther" ether form "FromAddress".
+function BuyTokenRefer(res,NoEther,FromAddress,PrivateKey,ParentAddress,Percent){
+    web3.eth.defaultAccount = FromAddress;
+    var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
+    var data = contract.buyrefer.getData(ParentAddress,Percent);
     var gasPrice = web3.eth.gasPrice;
     var gasLimit = 90000;
 
