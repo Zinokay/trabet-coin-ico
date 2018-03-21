@@ -27,7 +27,7 @@ web3.setProvider(new web3.providers.HttpProvider("https://ropsten.infura.io/meta
 var abi = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"crowdsaleAgent","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_crowdsaleAgent","type":"address"}],"name":"setCrowdsaleAgent","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"releaseTokenTransfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"target","type":"address"},{"name":"mintedAmount","type":"uint256"}],"name":"mintToken","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"buyPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"released","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newBuyPrice","type":"uint256"}],"name":"setPrices","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"buy","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"frozenAccount","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"},{"name":"_extraData","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"target","type":"address"},{"name":"freeze","type":"bool"}],"name":"freezeAccount","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"target","type":"address"},{"indexed":false,"name":"frozen","type":"bool"}],"name":"FrozenFunds","type":"event"}]
 var abiArray = abi;
 //Deployed contract address on Ropsten testnet
-var contractAddress = "0xE08ACF166e4dC9CE6B8111b7C0aF96d5A05a0E6D"; //For mainnet have to deploy new one.
+var contractAddress = "0x05a793400Ac6388cB8Ab6890e6aE58AF7db811bA"; //For mainnet have to deploy new one.
 //Make a variable to access contract's function
 var contract =  web3.eth.contract(abiArray).at(contractAddress);
 app.get('/', function (req, res) {
@@ -107,7 +107,7 @@ function setPrices(res,newBuyPrice,FromAddress,PrivateKey){
     var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
     var data = contract.setPrices.getData(newBuyPrice);
     var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 90000;
+    var gasLimit = 300000;
 
     var rawTransaction = {
         "from": FromAddress,
@@ -141,7 +141,7 @@ function TokenTransfer(res,ToAddress,NoToken,FromAddress,PrivateKey){
     var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
     var data = contract.transfer.getData(ToAddress, NoToken);
     var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 90000;
+    var gasLimit = 300000;
     var rawTransaction = {
         "from": FromAddress,
         "nonce": web3.toHex(count),
@@ -173,7 +173,7 @@ function EtherTransfer(res,ToAddress,NoEther,FromAddress,PrivateKey){
     var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
     var data = contract.transfer.getData(ToAddress, NoEther);
     var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 90000;
+    var gasLimit = 300000;
 
     var rawTransaction = {
         "from": FromAddress,
@@ -208,7 +208,7 @@ function BuyToken(res,NoEther,FromAddress,PrivateKey){
     var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
     var data = contract.buy.getData();
     var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 90000;
+    var gasLimit = 300000;
 
     var rawTransaction = {
         "from": FromAddress,
@@ -242,7 +242,7 @@ function mintToken(res,ToAddress,NoToken,FromAddress,PrivateKey){
     var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
     var data = contract.mintToken.getData(ToAddress, NoToken);
     var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 90000;
+    var gasLimit = 300000;
 
     var rawTransaction = {
         "from": FromAddress,
@@ -276,7 +276,7 @@ function transferOwnership(res,ToAddress,FromAddress,PrivateKey){
     var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
     var data = contract.transferOwnership.getData(ToAddress);
     var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 90000;
+    var gasLimit = 300000;
 
     var rawTransaction = {
         "from": FromAddress,
@@ -309,7 +309,7 @@ function setCrowdsaleAgent(res,ToAddress,FromAddress,PrivateKey){
     var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
     var data = contract.setCrowdsaleAgent.getData(ToAddress);
     var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 90000;
+    var gasLimit = 300000;
 
     var rawTransaction = {
         "from": FromAddress,
@@ -342,7 +342,7 @@ function releaseTokenTransfer(res,FromAddress,PrivateKey){
     var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
     var data = contract.releaseTokenTransfer.getData();
     var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 90000;
+    var gasLimit = 300000;
 
     var rawTransaction = {
         "from": FromAddress,
