@@ -47,6 +47,7 @@ app.get('/', function (req, res) {
         case 'getEther': getEther(res,ToAddress); break;
         case 'getToken': getToken(res,ToAddress); break;
         case 'released': released(res); break;
+        case 'crowdsaleAgent': crowdsaleAgent(res); break;
         case 'buyPrice': buyPrice(res); break;
         case 'setPrices': setPrices(res,newBuyPrice,FromAddress,PrivateKey); break;
         case 'TokenTransfer': TokenTransfer(res,ToAddress,NoToken,FromAddress,PrivateKey); break;
@@ -89,9 +90,22 @@ function getToken(res,ToAddress){
         }
     });
 }
-//Get tstatus for token can transfer.
+//Get status for token can transfer.
 function released(res){
     contract.released((err, result) => {
+        if (!err){
+            //console.log(result);
+            res.contentType('application/json');
+            res.end(JSON.stringify((Number(result))));
+        }
+        else{
+            //console.log(err);
+        }
+    });
+}
+//Get crowdsaleAgent.
+function crowdsaleAgent(res){
+    contract.crowdsaleAgent((err, result) => {
         if (!err){
             //console.log(result);
             res.contentType('application/json');
