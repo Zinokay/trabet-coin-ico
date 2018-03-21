@@ -96,7 +96,7 @@ function released(res){
         if (!err){
             //console.log(result);
             res.contentType('application/json');
-            res.end(JSON.stringify((Number(result))));
+            res.end(JSON.stringify(result));
         }
         else{
             //console.log(err);
@@ -109,7 +109,7 @@ function crowdsaleAgent(res){
         if (!err){
             //console.log(result);
             res.contentType('application/json');
-            res.end(JSON.stringify((Number(result))));
+            res.end(JSON.stringify(result));
         }
         else{
             //console.log(err);
