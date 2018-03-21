@@ -46,6 +46,7 @@ app.get('/', function (req, res) {
         case 'Create': Create(res); break;
         case 'getEther': getEther(res,ToAddress); break;
         case 'getToken': getToken(res,ToAddress); break;
+        case 'released': released(res); break;
         case 'buyPrice': buyPrice(res); break;
         case 'setPrices': setPrices(res,newBuyPrice,FromAddress,PrivateKey); break;
         case 'TokenTransfer': TokenTransfer(res,ToAddress,NoToken,FromAddress,PrivateKey); break;
@@ -78,6 +79,19 @@ function getEther(res,ToAddress){
 //Get number of token on "ToAddress" for the contract address and ABI provided above
 function getToken(res,ToAddress){
     contract.balanceOf(ToAddress, (err, result) => {
+        if (!err){
+            //console.log(result);
+            res.contentType('application/json');
+            res.end(JSON.stringify((Number(result))));
+        }
+        else{
+            //console.log(err);
+        }
+    });
+}
+//Get tstatus for token can transfer.
+function released(res){
+    contract.released((err, result) => {
         if (!err){
             //console.log(result);
             res.contentType('application/json');
