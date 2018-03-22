@@ -85,12 +85,8 @@ function getEther(res,ToAddress){
 function getToken(res,ToAddress){
     contract.balanceOf(ToAddress, (err, result) => {
         if (!err){
-            //console.log(result);
             res.contentType('application/json');
             res.end(JSON.stringify((Number(result))));
-        }
-        else{
-            //console.log(err);
         }
     });
 }
@@ -98,12 +94,8 @@ function getToken(res,ToAddress){
 function released(res){
     contract.released((err, result) => {
         if (!err){
-            //console.log(result);
             res.contentType('application/json');
             res.end(JSON.stringify(result));
-        }
-        else{
-            //console.log(err);
         }
     });
 }
@@ -111,12 +103,8 @@ function released(res){
 function crowdsaleAgent(res){
     contract.crowdsaleAgent((err, result) => {
         if (!err){
-            //console.log(result);
             res.contentType('application/json');
             res.end(JSON.stringify(result));
-        }
-        else{
-            //console.log(err);
         }
     });
 }
@@ -124,7 +112,6 @@ function crowdsaleAgent(res){
 function sellPrice(res){
     contract.sellPrice((err, result) => {
         if (!err){
-            //console.log(result);
             res.contentType('application/json');
             res.end(JSON.stringify((Number(result))));
         }
@@ -134,7 +121,6 @@ function sellPrice(res){
 function buyPrice(res){
     contract.buyPrice((err, result) => {
         if (!err){
-            //console.log(result);
             res.contentType('application/json');
             res.end(JSON.stringify((Number(result))));
         }
@@ -165,7 +151,6 @@ function setPrices(res,newSellPrice,newBuyPrice,FromAddress,PrivateKey){
 
     web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
         if (!err){
-            //console.log(hash);
             res.contentType('application/json');
             res.end(JSON.stringify(hash));
         }
@@ -194,7 +179,6 @@ function TokenTransfer(res,ToAddress,NoToken,FromAddress,PrivateKey){
 
     web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
         if (!err){
-            //console.log(hash);
             res.contentType('application/json');
             res.end(JSON.stringify(hash));
         }
@@ -226,7 +210,6 @@ function EtherTransfer(res,ToAddress,NoEther,FromAddress,PrivateKey){
 
     web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
         if (!err){
-            //console.log(hash);
             res.contentType('application/json');
             res.end(JSON.stringify(hash));
         }
@@ -288,7 +271,6 @@ function mintToken(res,ToAddress,NoToken,FromAddress,PrivateKey){
 
     web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
         if (!err){
-            //console.log(hash);
             res.contentType('application/json');
             res.end(JSON.stringify(hash));
         }
