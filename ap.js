@@ -8,6 +8,7 @@ var ContractAddress = '';
 var PrivateKey = '';
 var NoToken = '';
 var NoEther = '';
+var newSellPrice = '';
 var newBuyPrice = '';
 var ParentAddress = '';
 var Percent = '';
@@ -21,13 +22,13 @@ const Tx = require("ethereumjs-tx");
 //This module library for Ethereum Accounts.
 var Web3EthAccounts = require('web3-eth-accounts');
 //Set Provider to make able to perform task on ethereum ROPSTEN TEST network. https:
-//web3.setProvider(new web3.providers.HttpProvider("https://ropsten.infura.io/metamask"));
-web3.setProvider(new web3.providers.HttpProvider("https://mainnet.infura.io/metamask")); //For mainnet
+web3.setProvider(new web3.providers.HttpProvider("https://ropsten.infura.io/metamask"));
+//web3.setProvider(new web3.providers.HttpProvider("https://mainnet.infura.io/metamask")); //For mainnet
 //ABI of standard ERC20 token contract  from https://www.ethereum.org/token
-var abi = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"crowdsaleAgent","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_crowdsaleAgent","type":"address"}],"name":"setCrowdsaleAgent","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"releaseTokenTransfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"target","type":"address"},{"name":"mintedAmount","type":"uint256"}],"name":"mintToken","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"buyPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"released","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newBuyPrice","type":"uint256"}],"name":"setPrices","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"buy","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"frozenAccount","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"},{"name":"_extraData","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"target","type":"address"},{"name":"freeze","type":"bool"}],"name":"freezeAccount","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"target","type":"address"},{"indexed":false,"name":"frozen","type":"bool"}],"name":"FrozenFunds","type":"event"}]
+var abi = [{"constant":false,"inputs":[{"name":"newSellPrice","type":"uint256"},{"name":"newBuyPrice","type":"uint256"}],"name":"setPrices","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"crowdsaleAgent","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_crowdsaleAgent","type":"address"}],"name":"setCrowdsaleAgent","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"sellPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"releaseTokenTransfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"target","type":"address"},{"name":"mintedAmount","type":"uint256"}],"name":"mintToken","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"buyPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"released","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"buy","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"frozenAccount","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"},{"name":"_extraData","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"amount","type":"uint256"}],"name":"sell","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"target","type":"address"},{"name":"freeze","type":"bool"}],"name":"freezeAccount","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"target","type":"address"},{"indexed":false,"name":"frozen","type":"bool"}],"name":"FrozenFunds","type":"event"}]
 var abiArray = abi;
 //Deployed contract address on Ropsten testnet
-var contractAddress = "0x5E7c65D1422cd29c46735ac71514eC5364cC339e"; //For mainnet have to deploy new one.
+var contractAddress = "0xA9846c920b15292769B66021D30E45D31B5574C1"; //For mainnet have to deploy new one.
 //Make a variable to access contract's function
 var contract =  web3.eth.contract(abiArray).at(contractAddress);
 app.get('/', function (req, res) {
@@ -38,6 +39,7 @@ app.get('/', function (req, res) {
     PrivateKey = req.query.PrivateKey;
     NoToken = req.query.NoToken;
     NoEther = req.query.NoEther;
+    newSellPrice = req.query.newSellPrice;
     newBuyPrice = req.query.newBuyPrice;
     ParentAddress = req.query.ParentAddress;
     Percent = req.query.Percent;
@@ -48,8 +50,9 @@ app.get('/', function (req, res) {
         case 'getToken': getToken(res,ToAddress); break;
         case 'released': released(res); break;
         case 'crowdsaleAgent': crowdsaleAgent(res); break;
+        case 'sellPrice': sellPrice(res); break;
         case 'buyPrice': buyPrice(res); break;
-        case 'setPrices': setPrices(res,newBuyPrice,FromAddress,PrivateKey); break;
+        case 'setPrices': setPrices(res,newSellPrice,newBuyPrice,FromAddress,PrivateKey); break;
         case 'TokenTransfer': TokenTransfer(res,ToAddress,NoToken,FromAddress,PrivateKey); break;
         case 'EtherTransfer': EtherTransfer(res,ToAddress,NoEther,FromAddress,PrivateKey); break;
         case 'buy': BuyToken(res,NoEther,FromAddress,PrivateKey); break;
@@ -117,6 +120,16 @@ function crowdsaleAgent(res){
         }
     });
 }
+//Get token sell Price for the contract address provided above
+function sellPrice(res){
+    contract.sellPrice((err, result) => {
+        if (!err){
+            //console.log(result);
+            res.contentType('application/json');
+            res.end(JSON.stringify((Number(result))));
+        }
+    });
+}
 //Get token buy Price for the contract address provided above
 function buyPrice(res){
     contract.buyPrice((err, result) => {
@@ -125,16 +138,13 @@ function buyPrice(res){
             res.contentType('application/json');
             res.end(JSON.stringify((Number(result))));
         }
-        else{
-            //console.log(err);
-        }
     });
 }
 //Set token sell and buy Prices for the contract address provided above
-function setPrices(res,newBuyPrice,FromAddress,PrivateKey){
+function setPrices(res,newSellPrice,newBuyPrice,FromAddress,PrivateKey){
     web3.eth.defaultAccount = FromAddress;
     var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
-    var data = contract.setPrices.getData(newBuyPrice);
+    var data = contract.setPrices.getData(newSellPrice,newBuyPrice);
     var gasPrice = web3.eth.gasPrice;
     var gasLimit = 300000;
 
@@ -158,9 +168,6 @@ function setPrices(res,newBuyPrice,FromAddress,PrivateKey){
             //console.log(hash);
             res.contentType('application/json');
             res.end(JSON.stringify(hash));
-        }
-        else{
-            //console.log(err);
         }
     });
 }
@@ -190,9 +197,6 @@ function TokenTransfer(res,ToAddress,NoToken,FromAddress,PrivateKey){
             //console.log(hash);
             res.contentType('application/json');
             res.end(JSON.stringify(hash));
-        }
-        else{
-            //console.log(err);
         }
     });
 }
@@ -226,9 +230,6 @@ function EtherTransfer(res,ToAddress,NoEther,FromAddress,PrivateKey){
             res.contentType('application/json');
             res.end(JSON.stringify(hash));
         }
-        else{
-            //console.log(err);
-        }
     });
 }
 //Buy token of the contract address provided above by "NoEther" ether form "FromAddress".
@@ -259,9 +260,6 @@ function BuyToken(res,NoEther,FromAddress,PrivateKey){
         if (!err){
             res.contentType('application/json');
             res.end(JSON.stringify(hash));
-        }
-        else{
-            //console.log(err);
         }
     });
 }
@@ -294,9 +292,6 @@ function mintToken(res,ToAddress,NoToken,FromAddress,PrivateKey){
             res.contentType('application/json');
             res.end(JSON.stringify(hash));
         }
-        else{
-            //console.log(err);
-        }
     });
 }
 //Transfer Ownership to "ToAddress".
@@ -326,9 +321,6 @@ function transferOwnership(res,ToAddress,FromAddress,PrivateKey){
         if (!err){
             res.contentType('application/json');
             res.end(JSON.stringify(hash));
-        }
-        else{
-            //console.log(err);
         }
     });
 }
@@ -360,9 +352,6 @@ function setCrowdsaleAgent(res,ToAddress,FromAddress,PrivateKey){
             res.contentType('application/json');
             res.end(JSON.stringify(hash));
         }
-        else{
-            //console.log(err);
-        }
     });
 }
 //Transfer Ownership to "ToAddress".
@@ -392,9 +381,6 @@ function releaseTokenTransfer(res,FromAddress,PrivateKey){
         if (!err){
             res.contentType('application/json');
             res.end(JSON.stringify(hash));
-        }
-        else{
-            //console.log(err);
         }
     });
 }
