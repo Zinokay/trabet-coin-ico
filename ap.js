@@ -4,15 +4,9 @@ var app = express();
 var task_code = '';
 var ToAddress = '';
 var FromAddress = '';
-var ContractAddress = '';
 var PrivateKey = '';
 var NoToken = '';
 var NoEther = '';
-var newSellPrice = '';
-var newBuyPrice = '';
-var ParentAddress = '';
-var Percent = '';
-
 
 //This module standard library for Ethereum Network.
 const Web3 = require("web3");
@@ -25,10 +19,10 @@ var Web3EthAccounts = require('web3-eth-accounts');
 //web3.setProvider(new web3.providers.HttpProvider("https://ropsten.infura.io/metamask"));
 web3.setProvider(new web3.providers.HttpProvider("https://mainnet.infura.io/metamask")); //For mainnet
 //ABI of standard ERC20 token contract  from https://www.ethereum.org/token
-var abi = [{"constant":false,"inputs":[{"name":"newSellPrice","type":"uint256"},{"name":"newBuyPrice","type":"uint256"}],"name":"setPrices","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"crowdsaleAgent","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_crowdsaleAgent","type":"address"}],"name":"setCrowdsaleAgent","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"sellPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"releaseTokenTransfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"target","type":"address"},{"name":"mintedAmount","type":"uint256"}],"name":"mintToken","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"buyPrice","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"released","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"buy","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"frozenAccount","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"},{"name":"_extraData","type":"bytes"}],"name":"approveAndCall","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"amount","type":"uint256"}],"name":"sell","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"target","type":"address"},{"name":"freeze","type":"bool"}],"name":"freezeAccount","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"target","type":"address"},{"indexed":false,"name":"frozen","type":"bool"}],"name":"FrozenFunds","type":"event"}]
+var abi = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"INITIAL_SUPPLY","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_subtractedValue","type":"uint256"}],"name":"decreaseApproval","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_addedValue","type":"uint256"}],"name":"increaseApproval","outputs":[{"name":"success","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"_owner","type":"address"},{"name":"_spender","type":"address"}],"name":"allowance","outputs":[{"name":"remaining","type":"uint256"}],"payable":false,"type":"function"},{"inputs":[],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"}]
 var abiArray = abi;
 //Deployed contract address on Ropsten testnet
-var contractAddress = "0x94Dca4f83baE48822E9Cb011f02f1ac7b8f5E1ED"; //For mainnet have to deploy new one.
+var contractAddress = "0x6A5A304D8b0675D74665A3162353b1F5440B23d1"; //For mainnet have to deploy new one.
 //Make a variable to access contract's function
 var contract =  web3.eth.contract(abiArray).at(contractAddress);
 app.get('/', function (req, res) {
@@ -39,31 +33,17 @@ app.get('/', function (req, res) {
     PrivateKey = req.query.PrivateKey;
     NoToken = req.query.NoToken;
     NoEther = req.query.NoEther;
-    newSellPrice = req.query.newSellPrice;
-    newBuyPrice = req.query.newBuyPrice;
-    ParentAddress = req.query.ParentAddress;
-    Percent = req.query.Percent;
 
     switch (task_code) {
         case 'Create': Create(res); break;
         case 'getEther': getEther(res,ToAddress); break;
         case 'getToken': getToken(res,ToAddress); break;
-        case 'released': released(res); break;
-        case 'crowdsaleAgent': crowdsaleAgent(res); break;
-        case 'sellPrice': sellPrice(res); break;
-        case 'buyPrice': buyPrice(res); break;
-        case 'setPrices': setPrices(res,newSellPrice,newBuyPrice,FromAddress,PrivateKey); break;
         case 'TokenTransfer': TokenTransfer(res,ToAddress,NoToken,FromAddress,PrivateKey); break;
         case 'EtherTransfer': EtherTransfer(res,ToAddress,NoEther,FromAddress,PrivateKey); break;
-        case 'buy': BuyToken(res,NoEther,FromAddress,PrivateKey); break;
-        case 'mintToken': mintToken(res,ToAddress,NoToken,FromAddress,PrivateKey); break;
-        case 'transferOwnership': transferOwnership(res,ToAddress,FromAddress,PrivateKey); break;
-        case 'setCrowdsaleAgent': setCrowdsaleAgent(res,ToAddress,FromAddress,PrivateKey); break;
-        case 'releaseTokenTransfer': releaseTokenTransfer(res,FromAddress,PrivateKey); break;
 
         default:
             res.contentType('application/json');
-            res.end(JSON.stringify("EBanker Token node is ready..."));
+            res.end(JSON.stringify("PriorityEx node is ready..."));
     }
 
 });
@@ -90,72 +70,7 @@ function getToken(res,ToAddress){
         }
     });
 }
-//Get status for token can transfer.
-function released(res){
-    contract.released((err, result) => {
-        if (!err){
-            res.contentType('application/json');
-            res.end(JSON.stringify(result));
-        }
-    });
-}
-//Get crowdsaleAgent.
-function crowdsaleAgent(res){
-    contract.crowdsaleAgent((err, result) => {
-        if (!err){
-            res.contentType('application/json');
-            res.end(JSON.stringify(result));
-        }
-    });
-}
-//Get token sell Price for the contract address provided above
-function sellPrice(res){
-    contract.sellPrice((err, result) => {
-        if (!err){
-            res.contentType('application/json');
-            res.end(JSON.stringify((Number(result))));
-        }
-    });
-}
-//Get token buy Price for the contract address provided above
-function buyPrice(res){
-    contract.buyPrice((err, result) => {
-        if (!err){
-            res.contentType('application/json');
-            res.end(JSON.stringify((Number(result))));
-        }
-    });
-}
-//Set token sell and buy Prices for the contract address provided above
-function setPrices(res,newSellPrice,newBuyPrice,FromAddress,PrivateKey){
-    web3.eth.defaultAccount = FromAddress;
-    var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
-    var data = contract.setPrices.getData(newSellPrice,newBuyPrice);
-    var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 300000;
 
-    var rawTransaction = {
-        "from": FromAddress,
-        "nonce": web3.toHex(count),
-        "gasPrice": web3.toHex(gasPrice),
-        "gasLimit": web3.toHex(gasLimit),
-        "to": contractAddress,
-        "data": data,
-    };
-
-    var privKey = new Buffer(PrivateKey, 'hex');
-    var tx = new Tx(rawTransaction);
-
-    tx.sign(privKey);
-    var serializedTx = tx.serialize();
-
-    web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
-        if (!err){
-            res.contentType('application/json');
-            res.end(JSON.stringify(hash));
-        }
-    });
-}
 //Transfer "NoToken" token of the contract address provided above form "FromAddress" to "ToAddress" .
 function TokenTransfer(res,ToAddress,NoToken,FromAddress,PrivateKey){
     web3.eth.defaultAccount = FromAddress;
@@ -215,157 +130,7 @@ function EtherTransfer(res,ToAddress,NoEther,FromAddress,PrivateKey){
         }
     });
 }
-//Buy token of the contract address provided above by "NoEther" ether form "FromAddress".
-function BuyToken(res,NoEther,FromAddress,PrivateKey){
-    web3.eth.defaultAccount = FromAddress;
-    var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
-    var data = contract.buy.getData();
-    var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 300000;
 
-    var rawTransaction = {
-        "from": FromAddress,
-        "nonce": web3.toHex(count),
-        "gasPrice": web3.toHex(gasPrice),
-        "gasLimit": web3.toHex(gasLimit),
-        "to": contractAddress,
-        "value": web3.toHex(NoEther),
-        "data": data,
-    };
-
-    var privKey = new Buffer(PrivateKey, 'hex');
-    var tx = new Tx(rawTransaction);
-
-    tx.sign(privKey);
-    var serializedTx = tx.serialize();
-
-    web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
-        if (!err){
-            res.contentType('application/json');
-            res.end(JSON.stringify(hash));
-        }
-    });
-}
-//mintToken "NoToken" Token and send to "ToAddress".
-function mintToken(res,ToAddress,NoToken,FromAddress,PrivateKey){
-    web3.eth.defaultAccount = FromAddress;
-    var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
-    var data = contract.mintToken.getData(ToAddress, NoToken);
-    var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 300000;
-
-    var rawTransaction = {
-        "from": FromAddress,
-        "nonce": web3.toHex(count),
-        "gasPrice": web3.toHex(gasPrice),
-        "gasLimit": web3.toHex(gasLimit),
-        "to": contractAddress,
-        "data": data,
-    };
-
-    var privKey = new Buffer(PrivateKey, 'hex');
-    var tx = new Tx(rawTransaction);
-
-    tx.sign(privKey);
-    var serializedTx = tx.serialize();
-
-    web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
-        if (!err){
-            res.contentType('application/json');
-            res.end(JSON.stringify(hash));
-        }
-    });
-}
-//Transfer Ownership to "ToAddress".
-function transferOwnership(res,ToAddress,FromAddress,PrivateKey){
-    web3.eth.defaultAccount = FromAddress;
-    var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
-    var data = contract.transferOwnership.getData(ToAddress);
-    var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 300000;
-
-    var rawTransaction = {
-        "from": FromAddress,
-        "nonce": web3.toHex(count),
-        "gasPrice": web3.toHex(gasPrice),
-        "gasLimit": web3.toHex(gasLimit),
-        "to": contractAddress,
-        "data": data,
-    };
-
-    var privKey = new Buffer(PrivateKey, 'hex');
-    var tx = new Tx(rawTransaction);
-
-    tx.sign(privKey);
-    var serializedTx = tx.serialize();
-
-    web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
-        if (!err){
-            res.contentType('application/json');
-            res.end(JSON.stringify(hash));
-        }
-    });
-}
-//Set Crowdsale Agent to "ToAddress".
-function setCrowdsaleAgent(res,ToAddress,FromAddress,PrivateKey){
-    web3.eth.defaultAccount = FromAddress;
-    var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
-    var data = contract.setCrowdsaleAgent.getData(ToAddress);
-    var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 300000;
-
-    var rawTransaction = {
-        "from": FromAddress,
-        "nonce": web3.toHex(count),
-        "gasPrice": web3.toHex(gasPrice),
-        "gasLimit": web3.toHex(gasLimit),
-        "to": contractAddress,
-        "data": data,
-    };
-
-    var privKey = new Buffer(PrivateKey, 'hex');
-    var tx = new Tx(rawTransaction);
-
-    tx.sign(privKey);
-    var serializedTx = tx.serialize();
-
-    web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
-        if (!err){
-            res.contentType('application/json');
-            res.end(JSON.stringify(hash));
-        }
-    });
-}
-//Transfer Ownership to "ToAddress".
-function releaseTokenTransfer(res,FromAddress,PrivateKey){
-    web3.eth.defaultAccount = FromAddress;
-    var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
-    var data = contract.releaseTokenTransfer.getData();
-    var gasPrice = web3.eth.gasPrice;
-    var gasLimit = 300000;
-
-    var rawTransaction = {
-        "from": FromAddress,
-        "nonce": web3.toHex(count),
-        "gasPrice": web3.toHex(gasPrice),
-        "gasLimit": web3.toHex(gasLimit),
-        "to": contractAddress,
-        "data": data,
-    };
-
-    var privKey = new Buffer(PrivateKey, 'hex');
-    var tx = new Tx(rawTransaction);
-
-    tx.sign(privKey);
-    var serializedTx = tx.serialize();
-
-    web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex'), function(err, hash) {
-        if (!err){
-            res.contentType('application/json');
-            res.end(JSON.stringify(hash));
-        }
-    });
-}
 if (module === require.main) {
     // Start the server
     var server = app.listen(process.env.PORT || 8085, function () {
