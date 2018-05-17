@@ -60,7 +60,7 @@ app.get('/', function (req, res) {
 
         default:
             res.contentType('application/json');
-            res.end(JSON.stringify("EBanker_ICO node is ready..."));
+            res.end(JSON.stringify("Trabet Coin ICO node is ready..."));
     }
 });
 //Get token Price per Ethereum.
