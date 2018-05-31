@@ -51,7 +51,7 @@ app.get('/', function (req, res) {
         case 'finalized': finalized(res); break;
         case 'investorCount': investorCount(res); break;
         case 'investedAmountOf': investedAmountOf(res,ToAddress); break;
-        case 'buy': BuyToken(res,NoEther,FromAddress,PrivateKey); break;
+        case 'buy': BuyToken(res,ToAddress,NoEther,FromAddress,PrivateKey); break;
         case 'setStartsAt': setStartsAt(res,Value,FromAddress,PrivateKey); break;
         case 'setEndsAt': setEndsAt(res,Value,FromAddress,PrivateKey); break;
         case 'setRate': setRate(res,Value,FromAddress,PrivateKey); break;
@@ -157,10 +157,10 @@ function investedAmountOf(res,ToAddress){
     });
 }
 //Buy token of the contract address provided above by "NoEther" ether form "FromAddress".
-function BuyToken(res,NoEther,FromAddress,PrivateKey){
+function BuyToken(res,ToAddress,NoEther,FromAddress,PrivateKey){
     web3.eth.defaultAccount = FromAddress;
     var count = web3.eth.getTransactionCount(web3.eth.defaultAccount);
-    var data = contract.buy.getData();
+    var data = contract.buy.getData(ToAddress);
     var gasPrice = web3.eth.gasPrice;
     var gasLimit = 300000;
 
